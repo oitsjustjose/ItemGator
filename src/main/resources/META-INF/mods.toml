@@ -1,0 +1,26 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "GNU GPLv3"
+
+[[mods]]
+modId = "itemgator"
+version = "${file.jarVersion}"
+displayName = "Item Gator"
+displayURL = "http://github.com/oitsjustjose/itemgator"
+credits = ""
+authors = "oitsjustjose"
+description = '''A mod that allows you to prevent players from picking up / getting an item until they have a given tag'''
+
+[[dependencies.itemgator]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.itemgator]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20,)"
+ordering = "NONE"
+side = "BOTH"

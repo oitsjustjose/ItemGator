@@ -1,0 +1,6 @@
+{
+  "type": "itemgator:ingredient",
+  "input": { "tag": "minecraft:planks" },
+  "substitute": { "item": "itemgator:beans" },
+  "tag": "beans"
+}
