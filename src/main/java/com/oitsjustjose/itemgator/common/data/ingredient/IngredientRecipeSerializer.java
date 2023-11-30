@@ -13,13 +13,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class IngredientRecipeSerializer implements RecipeSerializer<IngredientRecipe> {
     @Override
     public @NotNull IngredientRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject obj) {
-        // TODO: better validation
-
         var input = Ingredient.fromJson(obj.get("input"), false);
         var substitute = ShapedRecipe.itemStackFromJson(obj.getAsJsonObject("substitute"));
         substitute.setCount(1);
@@ -38,7 +35,7 @@ public class IngredientRecipeSerializer implements RecipeSerializer<IngredientRe
     public void toNetwork(@NotNull FriendlyByteBuf buf, @NotNull IngredientRecipe recipe) {
         CraftingHelper.write(buf, recipe.getIngredient());
         buf.writeItemStack(recipe.getPlainSubstitute(), false);
-        buf.writeUtf(recipe.getTags().stream().collect(Collectors.joining(",")));
+        buf.writeUtf(String.join(",", recipe.getTags()));
     }
 
     @Override

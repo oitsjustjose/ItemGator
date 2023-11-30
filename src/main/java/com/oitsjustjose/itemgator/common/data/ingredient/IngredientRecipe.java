@@ -1,6 +1,5 @@
 package com.oitsjustjose.itemgator.common.data.ingredient;
 
-import com.google.common.collect.Lists;
 import com.oitsjustjose.itemgator.ItemGator;
 import com.oitsjustjose.itemgator.common.data.BaseRecipe;
 import net.minecraft.core.RegistryAccess;
@@ -28,14 +27,6 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
         this.ingredient = ingredient;
         this.substitute = substitute;
         this.tags = tags;
-        ItemGator.getInstance().CustomRecipeRegistry.registerRecipe(this);
-    }
-
-    public IngredientRecipe(ResourceLocation id, Ingredient ingredient, ItemStack substitute, String tag) {
-        this.id = id;
-        this.ingredient = ingredient;
-        this.substitute = substitute;
-        this.tags = Lists.newArrayList(tag);
         ItemGator.getInstance().CustomRecipeRegistry.registerRecipe(this);
     }
 
@@ -97,13 +88,13 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
     @Override
     public ItemStack getOriginal(ItemStack substitute) {
         if (!substitute.hasTag()) {
-            // TODO: WARNING
+            ItemGator.getInstance().LOGGER.error("Provided substitute {} does not have a tag - that item is likely lost forever!", substitute.getDisplayName());
             return substitute;
         }
 
         var tag = substitute.getTag();
         if (tag == null) {
-            // TODO: WARNING
+            ItemGator.getInstance().LOGGER.error("Provided substitute {} does not have a tag - that item is likely lost forever!", substitute.getDisplayName());
             return substitute;
         }
 

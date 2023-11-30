@@ -2,33 +2,26 @@ package com.oitsjustjose.itemgator;
 
 
 import com.oitsjustjose.itemgator.common.data.RecipeTypeRegistry;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
 @Mod(ItemGator.MOD_ID)
 public class ItemGator {
     public static final String MOD_ID = "itemgator";
-
+    private static ItemGator instance;
+    public final Logger LOGGER = LogManager.getLogger();
     public final RecipeTypeRegistry CustomRecipeRegistry = new RecipeTypeRegistry();
 
-    private static ItemGator instance;
 
     public ItemGator() {
         instance = this;
-
-        if (true) {
-            DeferredRegister<Item> ItemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-            ItemRegistry.register("beans", () -> new Item(new Item.Properties().stacksTo(3)));
-            ItemRegistry.register(FMLJavaModLoadingContext.get().getModEventBus());
-        }
 
         MinecraftForge.EVENT_BUS.register(this);
 

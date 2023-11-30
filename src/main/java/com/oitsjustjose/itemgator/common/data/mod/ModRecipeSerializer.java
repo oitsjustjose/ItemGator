@@ -1,23 +1,20 @@
 package com.oitsjustjose.itemgator.common.data.mod;
 
+import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
-import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
     @Override
     public @NotNull ModRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject obj) {
-        // TODO: better validation
-
         var mod = obj.get("mod").getAsString();
         var substitute = ShapedRecipe.itemStackFromJson(obj.getAsJsonObject("substitute"));
         substitute.setCount(1);
@@ -36,7 +33,7 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
     public void toNetwork(@NotNull FriendlyByteBuf buf, @NotNull ModRecipe recipe) {
         buf.writeUtf(recipe.getMod());
         buf.writeItemStack(recipe.getPlainSubstitute(), false);
-        buf.writeUtf(recipe.getTags().stream().collect(Collectors.joining(",")));
+        buf.writeUtf(String.join(",", recipe.getTags()));
     }
 
     @Override
