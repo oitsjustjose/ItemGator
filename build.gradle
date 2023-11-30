@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.oitsjustjose.itemgator'
 version = "${mod_version}"
-base { archivesName = "NaturalProgression-${game_version}-${mod_version}" }
+base { archivesName = "ItemGator-${game_version}-${mod_version}" }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft {

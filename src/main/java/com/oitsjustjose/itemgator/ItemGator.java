@@ -29,7 +29,7 @@ public class ItemGator {
     }
 
     @SubscribeEvent
-    public void onOther(TickEvent.PlayerTickEvent event) {
+    public void onTick(TickEvent.PlayerTickEvent event) {
         if (event.player.isCreative()) return;
         if (event.player.level().isClientSide()) return;
 
@@ -42,15 +42,15 @@ public class ItemGator {
                 if (stack.isEmpty()) continue;
 
                 // Check to see if we should be replacing this item with a substitute
-                var shouldReplace = allRecipes.stream().filter(x -> x.matchesOriginal(stack) && x.appliesTo(event.player)).findFirst();
+                var shouldReplace = allRecipes.parallelStream().filter(x -> x.matchesOriginal(stack) && x.appliesTo(event.player)).findFirst();
                 if (shouldReplace.isPresent()) {
                     var sub = shouldReplace.get().getSubstitute(stack);
                     inventory.setItem(i, sub);
                     continue;
                 }
 
-                // See if this is a substitute and we should be replacing this item with its original because the player has the needed tag
-                var shouldRevert = allRecipes.stream().filter(x -> x.matchesSubstitute(stack) && !x.appliesTo(event.player)).findFirst();
+                // See if this is a substitute and if we should be replacing this item with its original because the player has the needed tag
+                var shouldRevert = allRecipes.parallelStream().filter(x -> x.matchesSubstitute(stack) && !x.appliesTo(event.player)).findFirst();
                 if (shouldRevert.isPresent()) {
                     var orig = shouldRevert.get().getOriginal(stack);
                     inventory.setItem(i, orig);
