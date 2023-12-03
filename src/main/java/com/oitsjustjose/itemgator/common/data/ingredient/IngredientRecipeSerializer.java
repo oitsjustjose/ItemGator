@@ -28,7 +28,8 @@ public class IngredientRecipeSerializer implements RecipeSerializer<IngredientRe
             tags.add(obj.get("tag").getAsString());
         }
 
-        return new IngredientRecipe(id, input, substitute, tags);
+        var exceptions = obj.has("exceptions") ? Ingredient.fromJson(obj.get("exceptions"), false) : null;
+        return new IngredientRecipe(id, input, substitute, tags, exceptions);
     }
 
     @Override
@@ -36,6 +37,12 @@ public class IngredientRecipeSerializer implements RecipeSerializer<IngredientRe
         CraftingHelper.write(buf, recipe.getIngredient());
         buf.writeItemStack(recipe.getPlainSubstitute(), false);
         buf.writeUtf(String.join(",", recipe.getTags()));
+
+        var exceptions = recipe.getExceptions();
+        buf.writeBoolean(exceptions != null);
+        if (exceptions != null) {
+            CraftingHelper.write(buf, exceptions);
+        }
     }
 
     @Override
@@ -43,6 +50,9 @@ public class IngredientRecipeSerializer implements RecipeSerializer<IngredientRe
         var ingredient = Ingredient.fromNetwork(buf);
         var substitute = buf.readItem();
         var tags = Arrays.stream(buf.readUtf().split(",")).toList();
-        return new IngredientRecipe(id, ingredient, substitute, tags);
+
+        var hasExceptions = buf.readBoolean();
+        var exceptions = hasExceptions ? Ingredient.fromNetwork(buf) : null;
+        return new IngredientRecipe(id, ingredient, substitute, tags, exceptions);
     }
 }

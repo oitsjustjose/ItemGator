@@ -2,7 +2,9 @@ package com.oitsjustjose.itemgator;
 
 
 import com.oitsjustjose.itemgator.common.data.RecipeTypeRegistry;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,6 +31,11 @@ public class ItemGator {
     }
 
     @SubscribeEvent
+    public void onReload(AddReloadListenerEvent event) {
+        CustomRecipeRegistry.reset();
+    }
+
+    @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent event) {
         if (event.player.isCreative()) return;
         if (event.player.level().isClientSide()) return;
@@ -45,7 +52,8 @@ public class ItemGator {
                 var shouldReplace = allRecipes.parallelStream().filter(x -> x.matchesOriginal(stack) && x.appliesTo(event.player)).findFirst();
                 if (shouldReplace.isPresent()) {
                     var sub = shouldReplace.get().getSubstitute(stack);
-                    inventory.setItem(i, sub);
+                    inventory.setItem(i, ItemStack.EMPTY);
+                    inventory.add(sub);
                     continue;
                 }
 
@@ -53,7 +61,8 @@ public class ItemGator {
                 var shouldRevert = allRecipes.parallelStream().filter(x -> x.matchesSubstitute(stack) && !x.appliesTo(event.player)).findFirst();
                 if (shouldRevert.isPresent()) {
                     var orig = shouldRevert.get().getOriginal(stack);
-                    inventory.setItem(i, orig);
+                    inventory.setItem(i, ItemStack.EMPTY);
+                    inventory.add(orig);
                 }
             }
         });

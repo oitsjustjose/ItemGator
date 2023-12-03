@@ -3,8 +3,10 @@ package com.oitsjustjose.itemgator.common.data.mod;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +28,8 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
             tags.add(obj.get("tag").getAsString());
         }
 
-        return new ModRecipe(id, mod, substitute, tags);
+        var exceptions = obj.has("exceptions") ? Ingredient.fromJson(obj.get("exceptions"), false) : null;
+        return new ModRecipe(id, mod, substitute, tags, exceptions);
     }
 
     @Override
@@ -34,6 +37,12 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
         buf.writeUtf(recipe.getMod());
         buf.writeItemStack(recipe.getPlainSubstitute(), false);
         buf.writeUtf(String.join(",", recipe.getTags()));
+
+        var exceptions = recipe.getExceptions();
+        buf.writeBoolean(exceptions != null);
+        if (exceptions != null) {
+            CraftingHelper.write(buf, exceptions);
+        }
     }
 
     @Override
@@ -41,6 +50,9 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
         var mod = buf.readUtf();
         var substitute = buf.readItem();
         var tags = Arrays.stream(buf.readUtf().split(",")).toList();
-        return new ModRecipe(id, mod, substitute, tags);
+
+        var hasExceptions = buf.readBoolean();
+        var exceptions = hasExceptions ? Ingredient.fromNetwork(buf) : null;
+        return new ModRecipe(id, mod, substitute, tags, exceptions);
     }
 }

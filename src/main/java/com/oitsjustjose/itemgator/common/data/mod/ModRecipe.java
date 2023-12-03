@@ -6,6 +6,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -21,12 +23,14 @@ public class ModRecipe extends BaseRecipe implements Recipe<RecipeWrapper> {
     private final String mod;
     private final ItemStack substitute;
     private final List<String> tags;
+    private final @Nullable Ingredient exceptions;
 
-    public ModRecipe(ResourceLocation id, String mod, ItemStack substitute, List<String> tags) {
+    public ModRecipe(ResourceLocation id, String mod, ItemStack substitute, List<String> tags, @Nullable Ingredient exceptions) {
         this.id = id;
         this.mod = mod;
         this.substitute = substitute;
         this.tags = tags;
+        this.exceptions = exceptions;
         ItemGator.getInstance().CustomRecipeRegistry.registerRecipe(this);
     }
 
@@ -68,6 +72,7 @@ public class ModRecipe extends BaseRecipe implements Recipe<RecipeWrapper> {
 
     @Override
     public boolean matchesOriginal(ItemStack stackIn) {
+        if (exceptions != null && exceptions.test(stackIn)) return false;
         var rl = ForgeRegistries.ITEMS.getKey(stackIn.getItem());
         return rl != null && rl.getNamespace().equals(this.mod);
     }
@@ -125,7 +130,7 @@ public class ModRecipe extends BaseRecipe implements Recipe<RecipeWrapper> {
         return mod;
     }
 
-    public ItemStack getPlainSubstitute() {
-        return this.substitute.copy();
-    }
+    public ItemStack getPlainSubstitute() { return this.substitute.copy(); }
+
+    public @Nullable Ingredient getExceptions() { return this.exceptions; }
 }

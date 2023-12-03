@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -21,12 +22,14 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
     private final Ingredient ingredient;
     private final ItemStack substitute;
     private final List<String> tags;
+    private final @Nullable Ingredient exceptions;
 
-    public IngredientRecipe(ResourceLocation id, Ingredient ingredient, ItemStack substitute, List<String> tags) {
+    public IngredientRecipe(ResourceLocation id, Ingredient ingredient, ItemStack substitute, List<String> tags, @Nullable Ingredient exceptions) {
         this.id = id;
         this.ingredient = ingredient;
         this.substitute = substitute;
         this.tags = tags;
+        this.exceptions = exceptions;
         ItemGator.getInstance().CustomRecipeRegistry.registerRecipe(this);
     }
 
@@ -68,6 +71,7 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
 
     @Override
     public boolean matchesOriginal(ItemStack stackIn) {
+        if (exceptions != null && exceptions.test(stackIn)) return false;
         return this.ingredient.test(stackIn);
     }
 
@@ -127,4 +131,6 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
     public ItemStack getPlainSubstitute() {
         return this.substitute.copy();
     }
+
+    public @Nullable Ingredient getExceptions() { return this.exceptions; }
 }

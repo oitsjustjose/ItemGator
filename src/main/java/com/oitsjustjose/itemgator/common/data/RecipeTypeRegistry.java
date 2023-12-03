@@ -46,6 +46,10 @@ public class RecipeTypeRegistry {
         return this.allRecipes;
     }
 
+    public void reset() {
+        this.allRecipes.clear();
+    }
+
     public void registerRecipe(BaseRecipe recipe) {
         this.allRecipes.add(recipe);
     }
