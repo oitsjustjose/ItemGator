@@ -1,6 +1,6 @@
 {
   "pack": {
     "description": "ItemGator Resources",
-    "pack_format": 15
+    "pack_format": ${pack_format_number}
   }
 }

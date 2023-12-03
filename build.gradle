@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.oitsjustjose.itemgator'
 version = "${mod_version}"
-base { archivesName = "ItemGator-${game_version}-${mod_version}" }
+base { archivesName = "ItemGator-${game_version}" }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft {
@@ -31,6 +31,23 @@ minecraft {
 
 dependencies {
     minecraft "net.neoforged:forge:${game_version}-${neo_version}"
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version       : game_version,
+            minecraft_version_range : game_version_range,
+            neo_version             : neo_version,
+            neo_version_range       : neo_version_range,
+            loader_version_range    : loader_version_range,
+            mod_version             : mod_version,
+            pack_format_number      : pack_format_number,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
 }
 
 jar {

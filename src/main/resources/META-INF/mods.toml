@@ -1,10 +1,10 @@
 modLoader = "javafml"
-loaderVersion = "[47,)"
+loaderVersion = "${neo_version_range}"
 license = "GNU GPLv3"
 
 [[mods]]
 modId = "itemgator"
-version = "${file.jarVersion}"
+version = "${mod_version}"
 displayName = "Item Gator"
 displayURL = "http://github.com/oitsjustjose/itemgator"
 credits = ""
@@ -14,13 +14,13 @@ description = '''A mod that allows you to prevent players from picking up / gett
 [[dependencies.itemgator]]
 modId = "forge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "${neo_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.itemgator]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20,)"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"

@@ -79,6 +79,9 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
     @Override
     public ItemStack getSubstitute(ItemStack original) {
         var stack = substitute.copy();
+        stack.setCount(original.getCount());
+        original.setCount(1);
+
         var tag = stack.getOrCreateTag();
         tag.put("original", original.serializeNBT());
         stack.setTag(tag);
@@ -98,7 +101,9 @@ public class IngredientRecipe extends BaseRecipe implements Recipe<RecipeWrapper
             return substitute;
         }
 
-        return ItemStack.of(tag.getCompound("original"));
+        var original = ItemStack.of(tag.getCompound("original"));
+        original.setCount(substitute.getCount());
+        return original;
     }
 
     @Override
