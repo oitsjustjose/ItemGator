@@ -2,7 +2,6 @@ package com.oitsjustjose.itemgator;
 
 
 import com.oitsjustjose.itemgator.common.data.RecipeTypeRegistry;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
@@ -52,8 +51,7 @@ public class ItemGator {
                 var shouldReplace = allRecipes.parallelStream().filter(x -> x.matchesOriginal(stack) && x.appliesTo(event.player)).findFirst();
                 if (shouldReplace.isPresent()) {
                     var sub = shouldReplace.get().getSubstitute(stack);
-                    inventory.setItem(i, ItemStack.EMPTY);
-                    inventory.add(sub);
+                    inventory.setItem(i, sub);
                     continue;
                 }
 
@@ -61,8 +59,7 @@ public class ItemGator {
                 var shouldRevert = allRecipes.parallelStream().filter(x -> x.matchesSubstitute(stack) && !x.appliesTo(event.player)).findFirst();
                 if (shouldRevert.isPresent()) {
                     var orig = shouldRevert.get().getOriginal(stack);
-                    inventory.setItem(i, ItemStack.EMPTY);
-                    inventory.add(orig);
+                    inventory.setItem(i, orig);
                 }
             }
         });
