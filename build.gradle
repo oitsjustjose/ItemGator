@@ -70,7 +70,7 @@ tasks.register('publish') {
 
 modrinth {
     token = project.hasProperty("MODRINTH_API_KEY") ? project.MODRINTH_API_KEY : ""
-    projectId = "VkVpYDxO"
+    projectId = "2A2XjoYK"
     versionName = "ItemGator ${game_version} ${mod_version}"
     versionNumber = "${game_version}-${mod_version}"
     versionType = "release"
