@@ -7,10 +7,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
         var mod = obj.get("mod").getAsString();
         var substitute = ShapedRecipe.itemStackFromJson(obj.getAsJsonObject("substitute"));
         substitute.setCount(1);
-        List<String> tags = Lists.newArrayList();
+        List<String> tags = new ArrayList<>();
 
         if (obj.has("tags")) {
             obj.getAsJsonArray("tags").forEach(x -> tags.add(x.getAsString()));

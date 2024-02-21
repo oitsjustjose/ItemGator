@@ -11,8 +11,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.compress.utils.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeTypeRegistry {
@@ -29,7 +29,7 @@ public class RecipeTypeRegistry {
     private final List<BaseRecipe> allRecipes;
 
     public RecipeTypeRegistry() {
-        this.allRecipes = Lists.newArrayList();
+        this.allRecipes = new ArrayList<>();
 
         this.MOD = new ModRecipeSerializer();
         this.MOD_TYPE = new ModRecipeType();
